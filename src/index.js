@@ -42,4 +42,9 @@ async function main() {
 	}
 }
 
-module.exports = { main };
+// Cloudflare Workers entry point
+export default {
+	async scheduled(event, env, ctx) {
+		await main();
+	}
+};
