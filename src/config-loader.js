@@ -33,8 +33,5 @@ module.exports = {
     fbPageId: process.env.FB_PAGE_ID,
 
     // News RSS Feed URL
-    newsRssUrl: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen',
-
-    // Cron Schedule (runs every 60 minutes)
-    cronSchedule: '*/60 * * * *'
+    newsRssUrl: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen'
 }; 

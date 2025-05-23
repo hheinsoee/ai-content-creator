@@ -1,5 +1,5 @@
 const Parser = require('rss-parser');
-const config = require('../config');
+const config = require('./config-loader');
 
 // Initialize RSS Parser
 const parser = new Parser();

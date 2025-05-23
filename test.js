@@ -1,4 +1,4 @@
-const { main } = require('./index');
+const { main } = require('./src/index');
 
 // Run the main function once for testing
 console.log('Running test...');

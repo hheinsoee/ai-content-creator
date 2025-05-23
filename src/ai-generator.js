@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs');
 const path = require('path');
-const config = require('../config');
+const config = require('./config-loader');
 
 // Initialize Google Gemini
 const genAI = new GoogleGenAI({ apiKey: config.geminiApiKey });
