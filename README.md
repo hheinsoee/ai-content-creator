@@ -4,7 +4,7 @@ An automated Node.js application that creates and posts news content to Facebook
 
 ## Features
 
-- Fetches latest news from Google News RSS feed
+- Fetches latest news from Google News (TOPIC = Technology) RSS feed
 - Translates and summarizes news in Burmese using Google Gemini AI
 - Generates image descriptions using AI
 - Posts content to Facebook automatically
@@ -35,7 +35,7 @@ The application can be configured through the `config.js` file:
 - `fbAccessToken`: Your Facebook access token
 - `fbPageId`: Your Facebook page ID
 - `newsRssUrl`: The RSS feed URL to fetch news from
-- `cronSchedule`: The schedule for running the job (default: every 6 hours)
+- `cronSchedule`: The schedule for running the job (default: every 1 hours)
 
 ## Dependencies
 

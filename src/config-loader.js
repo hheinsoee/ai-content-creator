@@ -35,6 +35,6 @@ module.exports = {
     // News RSS Feed URL
     newsRssUrl: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen',
 
-    // Cron Schedule (runs every 10 minutes)
-    cronSchedule: '*/10 * * * *'
+    // Cron Schedule (runs every 60 minutes)
+    cronSchedule: '*/60 * * * *'
 }; 
