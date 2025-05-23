@@ -1,14 +1,22 @@
-const Parser = require('rss-parser');
-const config = require('./config-loader');
-
-// Initialize RSS Parser
-const parser = new Parser();
+import { config } from './config-loader.js';
 
 class NewsFetcher {
     async fetchLatestNews() {
         try {
-            const feed = await parser.parseURL(config.newsRssUrl);
-            return feed.items[0]; // Get the latest news item
+            const response = await fetch(config.newsApiUrl);
+            const data = await response.json();
+            
+            if (!data.articles || data.articles.length === 0) {
+                return null;
+            }
+
+            const article = data.articles[0];
+            return {
+                title: article.title,
+                content: article.description,
+                link: article.url,
+                pubDate: article.publishedAt
+            };
         } catch (error) {
             console.error('Error fetching news:', error);
             return null;
@@ -16,4 +24,4 @@ class NewsFetcher {
     }
 }
 
-module.exports = new NewsFetcher(); 
+export const newsFetcher = new NewsFetcher(); 

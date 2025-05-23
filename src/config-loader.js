@@ -1,6 +1,10 @@
-const dotenv = require('dotenv');
-const path = require('path');
-const { ConfigError } = require('./errors');
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { ConfigError } from './errors.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Try to load .env file
 const envPath = path.resolve(process.cwd(), '.env');
@@ -14,7 +18,8 @@ try {
 const requiredEnvVars = {
     GEMINI_API_KEY: 'Google Gemini API Key',
     FB_ACCESS_TOKEN: 'Facebook Access Token',
-    FB_PAGE_ID: 'Facebook Page ID'
+    FB_PAGE_ID: 'Facebook Page ID',
+    GNEWS_API_KEY: 'GNews API Key'
 };
 
 // Check for missing environment variables
@@ -24,7 +29,7 @@ Object.entries(requiredEnvVars).forEach(([envVar, description]) => {
     }
 });
 
-module.exports = {
+export const config = {
     // Google Gemini API Key
     geminiApiKey: process.env.GEMINI_API_KEY,
 
@@ -32,6 +37,10 @@ module.exports = {
     fbAccessToken: process.env.FB_ACCESS_TOKEN,
     fbPageId: process.env.FB_PAGE_ID,
 
+    // GNews API Key
+    gnewsApiKey: process.env.GNEWS_API_KEY,
+
+    newsApiUrl:`https://gnews.io/api/v4/top-headlines?category=technology&apikey=${process.env.GNEWS_API_KEY}&max=1`,
     // News RSS Feed URL
     newsRssUrl: 'https://news.google.com/rss/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGRqTVhZU0FtVnVHZ0pWVXlnQVAB?hl=en-US&gl=US&ceid=US%3Aen'
 }; 

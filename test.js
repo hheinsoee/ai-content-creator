@@ -1,4 +1,4 @@
-const main = require('./src/index');
+import { main } from './src/index.js';
 
 // Run the main function once for testing
 console.log('Running test...');

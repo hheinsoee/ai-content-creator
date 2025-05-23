@@ -1,7 +1,11 @@
-const { GoogleGenAI } = require('@google/genai');
-const fs = require('fs');
-const path = require('path');
-const config = require('./config-loader');
+import { GoogleGenAI } from '@google/genai';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { config } from './config-loader.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize Google Gemini
 const genAI = new GoogleGenAI({ apiKey: config.geminiApiKey });
@@ -76,8 +80,6 @@ const generateContent = async (newsItem) => {
     }
 };
 
-const aiGenerator = {
+export const aiGenerator = {
     generateContent
-};
-
-module.exports = aiGenerator; 
+}; 

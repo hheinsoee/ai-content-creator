@@ -1,7 +1,7 @@
-const axios = require('axios');
-const fs = require('fs');
-const FormData = require('form-data');
-const config = require('./config-loader');
+import axios from 'axios';
+import fs from 'fs';
+import FormData from 'form-data';
+import { config } from './config-loader.js';
 
 class FacebookPoster {
     constructor() {
@@ -54,4 +54,4 @@ class FacebookPoster {
     }
 }
 
-module.exports = new FacebookPoster(); 
+export const facebookPoster = new FacebookPoster(); 

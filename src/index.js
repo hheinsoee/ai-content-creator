@@ -12,11 +12,11 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-const newsFetcher = require('./news-fetcher');
-const aiGenerator = require('./ai-generator');
-const facebookPoster = require('./facebook-poster');
+import { newsFetcher } from './news-fetcher.js';
+import { aiGenerator } from './ai-generator.js';
+import { facebookPoster } from './facebook-poster.js';
 
-async function main() {
+export async function main() {
 	console.log('Starting content creation process...');
 	
 	try {

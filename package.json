@@ -2,6 +2,7 @@
   "name": "ai-content-creator",
   "version": "1.0.0",
   "description": "Automated news content creator and Facebook poster",
+  "type": "module",
   "main": "run.js",
   "scripts": {
     "test": "node test.js",
@@ -16,7 +17,6 @@
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
     "node-cron": "^3.0.3",
-    "rss-parser": "^3.13.0",
     "form-data": "^4.0.0"
   },
 	"devDependencies": {

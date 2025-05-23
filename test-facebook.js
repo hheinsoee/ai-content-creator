@@ -1,4 +1,4 @@
-const facebookPoster = require('./src/facebook-poster');
+import { facebookPoster } from './src/facebook-poster.js';
 
 // Test content
 const testContent = {
