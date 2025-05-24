@@ -21,35 +21,36 @@ class FacebookPoster {
     async post(content) {
         try {
             if (content.imageData) {
-                // Create form data with base64 image
-                const formData = new FormData();
-                
-                // Convert base64 to blob
+                // Convert base64 to buffer
                 const imageBuffer = Buffer.from(content.imageData, 'base64');
-                const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
                 
-                // Append the blob to form data
-                formData.append('source', imageBlob, 'image.png');
+                // Create form data
+                const formData = new FormData();
+                formData.append('source', new Blob([imageBuffer], { type: 'image/png' }));
                 formData.append('access_token', this.accessToken);
                 formData.append('message', content.text);
                 formData.append('published', 'true');
 
-                console.log("Uploading photo with message...");
                 const uploadUrl = `${this.baseUrl}/${this.pageId}/photos`;
                 
-                console.log('Using Page ID:', this.pageId);
+                console.log('Uploading photo to Facebook...');
+                console.log('Page ID:', this.pageId);
                 console.log('Upload URL:', uploadUrl);
                 
-                const uploadResponse = await axios.post(uploadUrl, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    maxContentLength: Infinity,
-                    maxBodyLength: Infinity
+                const response = await fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData
                 });
 
-                console.log('Posted to Facebook successfully:', uploadResponse.data);
-                return uploadResponse.data;
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Facebook API Error Details:', errorData);
+                    throw new Error(`Facebook API Error: ${JSON.stringify(errorData)}`);
+                }
+
+                const data = await response.json();
+                console.log('Posted to Facebook successfully:', data);
+                return data;
             } else {
                 // Text-only post
                 const url = `${this.baseUrl}/${this.pageId}/feed`;
@@ -62,14 +63,26 @@ class FacebookPoster {
                 return response.data;
             }
         } catch (error) {
-            console.error('Error posting to Facebook:', error.response?.data || error.message);
-            if (error.response?.data?.error) {
-                console.error('Facebook API Error:', {
-                    code: error.response.data.error.code,
-                    message: error.response.data.error.message,
-                    type: error.response.data.error.type
+            console.error('Error posting to Facebook:', error);
+            
+            // Log detailed error information
+            if (error.response?.data) {
+                console.error('Facebook API Error Details:', {
+                    status: error.response.status,
+                    data: error.response.data,
+                    headers: error.response.headers
                 });
             }
+            
+            // Check for specific error types
+            if (error.message.includes('access_token')) {
+                throw new Error('Invalid or expired Facebook access token');
+            } else if (error.message.includes('permission')) {
+                throw new Error('Insufficient permissions to post to Facebook page');
+            } else if (error.message.includes('rate limit')) {
+                throw new Error('Facebook API rate limit exceeded');
+            }
+            
             throw error;
         }
     }

@@ -15,6 +15,7 @@
 import { newsFetcher } from './news-fetcher.js';
 import { aiGenerator } from './ai-generator.js';
 import { facebookPoster } from './facebook-poster.js';
+import { facebookCommenter } from './facebook-commenter.js';
 
 export async function main() {
 	console.log('Starting content creation process...');
@@ -36,8 +37,18 @@ export async function main() {
 			return;
 		}
 		console.log({generated_content:content.text});
+		
 		// Post to Facebook
-		await facebookPoster.post(content);
+		const postResult = await facebookPoster.post(content);
+		
+		// Add comment with original link
+		if (postResult && postResult.id) {
+			console.log('Adding comment with original link...');
+			await facebookCommenter.addComment(
+				postResult.id,
+				`Original article: ${newsItem.url}`
+			);
+		}
 	} catch (error) {
 		console.error('Error in main process:', error);
 	}
@@ -62,8 +73,17 @@ export default {
 					imageData: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
 				};
 
-				const result = await facebookPoster.post(testContent);
-				return new Response(JSON.stringify({ success: true, result }), {
+				const postResult = await facebookPoster.post(testContent);
+				
+				// Add test comment
+				if (postResult && postResult.id) {
+					await facebookCommenter.addComment(
+						postResult.id,
+						"This is a test comment with a link: https://example.com"
+					);
+				}
+
+				return new Response(JSON.stringify({ success: true, postResult }), {
 					headers: { 'Content-Type': 'application/json' }
 				});
 			} catch (error) {

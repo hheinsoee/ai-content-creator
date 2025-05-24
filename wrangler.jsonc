@@ -13,8 +13,12 @@
 	},
 	"triggers": {
 		"crons": [
-			"*/10 * * * *"
+			"*/60 * * * *"
 		]
+	},
+	"build": {
+		"command": "npm run build",
+		"watch_dir": "src"
 	}
 	/**
 	 * Smart Placement

@@ -10,7 +10,8 @@
     "deploy": "wrangler deploy",
 		"dev": "wrangler dev --test-scheduled",
 		"start": "wrangler dev --test-scheduled",
-		"logs": "wrangler tail"
+		"logs": "wrangler tail",
+		"build": "echo 'No build step needed'"
   },
   "dependencies": {
     "@google/genai": "^0.2.0",

@@ -14,8 +14,9 @@ class NewsFetcher {
             return {
                 title: article.title,
                 content: article.description,
-                link: article.url,
-                pubDate: article.publishedAt
+                url: article.url,
+                pubDate: article.publishedAt,
+                image: article.image
             };
         } catch (error) {
             console.error('Error fetching news:', error);
