@@ -1,11 +1,11 @@
-import { config } from './config-loader.js';
+import { config } from './config.js';
 
 class NewsFetcher {
     async fetchLatestNews() {
         try {
             const response = await fetch(config.newsApiUrl);
             const data = await response.json();
-            
+            console.log(config.newsApiUrl);
             if (!data.articles || data.articles.length === 0) {
                 return null;
             }

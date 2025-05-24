@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai';
-import { config } from './config-loader.js';
+import { config } from './config.js';
 
 // Initialize Google Gemini
 const genAI = new GoogleGenAI({ apiKey: config.geminiApiKey });

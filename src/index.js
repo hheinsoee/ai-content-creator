@@ -27,14 +27,15 @@ export async function main() {
 			return;
 		}
 
-		// console.log({origynal_content:newsItem});
+		console.log({origynal_content:newsItem});
 		// Generate content
+		console.log('Generating content...');
 		const content = await aiGenerator.generateContent(newsItem);
 		if (!content) {
 			console.log('Failed to generate content');
 			return;
 		}
-		// console.log({generated_content:content});
+		console.log({generated_content:content.text});
 		// Post to Facebook
 		await facebookPoster.post(content);
 	} catch (error) {
@@ -46,5 +47,37 @@ export async function main() {
 export default {
 	async scheduled(event, env, ctx) {
 		await main();
+	},
+
+	// Add a test endpoint
+	async fetch(request, env, ctx) {
+		const url = new URL(request.url);
+		
+		// Test endpoint
+		if (url.pathname === '/test') {
+			try {
+				// Test content with a predefined image (1x1 transparent PNG)
+				const testContent = {
+					text: "မင်္ဂလာပါ။ ဒါဟာ Facebook Posting Test ဖြစ်ပါတယ်။\n\nHello! This is a Facebook Posting Test.",
+					imageData: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+				};
+
+				const result = await facebookPoster.post(testContent);
+				return new Response(JSON.stringify({ success: true, result }), {
+					headers: { 'Content-Type': 'application/json' }
+				});
+			} catch (error) {
+				return new Response(JSON.stringify({ 
+					success: false, 
+					error: error.message,
+					details: error.response?.data
+				}), {
+					status: 500,
+					headers: { 'Content-Type': 'application/json' }
+				});
+			}
+		}
+
+		return new Response('Not found', { status: 404 });
 	}
 };

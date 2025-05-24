@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import { ConfigError } from './errors.js';
 
 // Try to load .env file
 try {
@@ -19,7 +18,7 @@ const requiredEnvVars = {
 // Check for missing environment variables
 Object.entries(requiredEnvVars).forEach(([envVar, description]) => {
     if (!process.env[envVar]) {
-        throw new ConfigError(envVar, description);
+        throw new Error(`Missing required environment variable: ${envVar} (${description})`);
     }
 });
 
