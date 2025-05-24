@@ -7,5 +7,5 @@ export const config = {
     fbPageId: "000000000000000",
 
     // News API URL
-    newsApiUrl: `https://gnews.io/api/v4/top-headlines?category=technology&apikey=8d60e54f1ebed174bf16d294df8c06d3&max=1`
+    newsApiUrl: `https://gnews.io/api/v4/top-headlines?category=technology&apikey=8d60e54f1ebed174bf16d294df8c06d3&max=11&lang=en`
 }; 
