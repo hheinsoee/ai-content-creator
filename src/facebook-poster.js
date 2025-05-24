@@ -1,5 +1,4 @@
 import axios from 'axios';
-import fs from 'fs';
 import FormData from 'form-data';
 import { config } from './config-loader.js';
 
@@ -12,12 +11,19 @@ class FacebookPoster {
 
     async post(content) {
         try {
-            if (content.imagePath) {
-                // First upload the image
+            if (content.imageData) {
+                // Create form data with base64 image
                 const formData = new FormData();
-                const imageStream = fs.createReadStream(content.imagePath);
                 
-                formData.append('source', imageStream);
+                // Convert base64 to buffer
+                const imageBuffer = Buffer.from(content.imageData, 'base64');
+                
+                // Append the buffer directly to form data
+                formData.append('source', imageBuffer, {
+                    filename: 'image.png',
+                    contentType: 'image/png'
+                });
+                
                 formData.append('access_token', this.accessToken);
                 formData.append('message', content.text);
                 formData.append('published', 'true');

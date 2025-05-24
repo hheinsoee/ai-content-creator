@@ -1,23 +1,8 @@
 import { GoogleGenAI } from '@google/genai';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { config } from './config-loader.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Initialize Google Gemini
 const genAI = new GoogleGenAI({ apiKey: config.geminiApiKey });
-
-// Ensure generated directory exists
-const ensureGeneratedDir = () => {
-    const dir = path.join(process.cwd(), 'generated');
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-    }
-    return dir;
-};
 
 // Generate text content
 const generateText = async (prompt) => {
@@ -34,8 +19,8 @@ const generateImageDescription = async (newsTitle) => {
     return generateText(prompt);
 };
 
-// Generate and save image
-const generateAndSaveImage = async (description) => {
+// Generate image
+const generateImage = async (description) => {
     const imageResponse = await genAI.models.generateContent({
         model: "gemini-2.0-flash-preview-image-generation",
         contents: description,
@@ -44,16 +29,9 @@ const generateAndSaveImage = async (description) => {
         }
     });
 
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const imagePath = path.join(ensureGeneratedDir(), `image-${timestamp}.png`);
-
     for (const part of imageResponse.candidates[0].content.parts) {
         if (part.inlineData) {
-            const imageData = part.inlineData.data;
-            const buffer = Buffer.from(imageData, 'base64');
-            fs.writeFileSync(imagePath, buffer);
-            console.log('Image saved as:', imagePath);
-            return imagePath;
+            return part.inlineData.data; // Return base64 image data directly
         }
     }
     return null;
@@ -68,11 +46,11 @@ const generateContent = async (newsItem) => {
 
         // Generate image
         const imageDescription = await generateImageDescription(newsItem.title);
-        const imagePath = await generateAndSaveImage(imageDescription);
+        const imageData = await generateImage(imageDescription);
 
         return {
             text,
-            imagePath
+            imageData // Return base64 image data instead of file path
         };
     } catch (error) {
         console.error('Error generating content:', error);
