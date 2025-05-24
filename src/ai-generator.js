@@ -15,7 +15,7 @@ const generateText = async (prompt) => {
 
 // Generate image description
 const generateImageDescription = async (newsTitle) => {
-    const prompt = `Create a detailed image description for a portrait-oriented image (4:5 aspect ratio) that represents this news: ${newsTitle}. The image should be suitable for social media sharing, with clear details and vibrant colors. Make it visually striking and engaging, optimized for vertical viewing on mobile devices.`;
+    const prompt = `Create a detailed image description for a portrait-oriented image (4:5 aspect ratio) that represents this news: ${newsTitle}. The image should be suitable for social media sharing, with clear details and vibrant colors. Make it visually striking and engaging.`;
     return generateText(prompt);
 };
 
