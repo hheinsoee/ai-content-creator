@@ -27,14 +27,14 @@ export async function main() {
 			return;
 		}
 
-		console.log({origynal_content:newsItem});
+		// console.log({origynal_content:newsItem});
 		// Generate content
 		const content = await aiGenerator.generateContent(newsItem);
 		if (!content) {
 			console.log('Failed to generate content');
 			return;
 		}
-		console.log({generated_content:content});
+		// console.log({generated_content:content});
 		// Post to Facebook
 		await facebookPoster.post(content);
 	} catch (error) {

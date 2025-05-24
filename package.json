@@ -16,8 +16,7 @@
     "@google/genai": "^0.2.0",
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
-    "node-cron": "^3.0.3",
-    "form-data": "^4.0.0"
+    "node-cron": "^3.0.3"
   },
 	"devDependencies": {
 		"wrangler": "^4.16.1"

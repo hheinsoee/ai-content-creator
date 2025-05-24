@@ -1,5 +1,4 @@
 import axios from 'axios';
-import FormData from 'form-data';
 import { config } from './config-loader.js';
 
 class FacebookPoster {
@@ -15,15 +14,12 @@ class FacebookPoster {
                 // Create form data with base64 image
                 const formData = new FormData();
                 
-                // Convert base64 to buffer
+                // Convert base64 to blob
                 const imageBuffer = Buffer.from(content.imageData, 'base64');
+                const imageBlob = new Blob([imageBuffer], { type: 'image/png' });
                 
-                // Append the buffer directly to form data
-                formData.append('source', imageBuffer, {
-                    filename: 'image.png',
-                    contentType: 'image/png'
-                });
-                
+                // Append the blob to form data
+                formData.append('source', imageBlob, 'image.png');
                 formData.append('access_token', this.accessToken);
                 formData.append('message', content.text);
                 formData.append('published', 'true');
@@ -33,7 +29,6 @@ class FacebookPoster {
                 
                 const uploadResponse = await axios.post(uploadUrl, formData, {
                     headers: {
-                        ...formData.getHeaders(),
                         'Content-Type': 'multipart/form-data'
                     },
                     maxContentLength: Infinity,
