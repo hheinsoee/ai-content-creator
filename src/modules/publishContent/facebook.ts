@@ -1,7 +1,36 @@
-import type { Env, GeneratedContent, FacebookPostResult, FacebookError } from '../../types.js';
+import type { Env, GeneratedContent, FacebookPostResult, FacebookError, TokenDebugResponse } from '../../types.js';
 
 const FB_API_VERSION = 'v18.0';
 const FB_BASE_URL = `https://graph.facebook.com/${FB_API_VERSION}`;
+
+// Validate Facebook token before running pipeline
+export async function validateToken(env: Env): Promise<{ valid: boolean; error?: string }> {
+  try {
+    const url = `https://graph.facebook.com/debug_token?input_token=${env.FB_ACCESS_TOKEN}&access_token=${env.FB_ACCESS_TOKEN}`;
+    const response = await fetch(url);
+    const data = (await response.json()) as TokenDebugResponse;
+
+    if (data.error) {
+      return { valid: false, error: data.error.message };
+    }
+
+    if (!data.data?.is_valid) {
+      return { valid: false, error: 'Token is invalid or expired' };
+    }
+
+    // Check if token expires soon (within 1 hour)
+    if (data.data.expires_at) {
+      const expiresIn = data.data.expires_at - Math.floor(Date.now() / 1000);
+      if (expiresIn < 3600) {
+        console.warn(`Token expires in ${Math.floor(expiresIn / 60)} minutes`);
+      }
+    }
+
+    return { valid: true };
+  } catch (error) {
+    return { valid: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
 
 function validateConfig(env: Env): void {
   if (!env.FB_PAGE_ID || !/^\d+$/.test(env.FB_PAGE_ID)) {

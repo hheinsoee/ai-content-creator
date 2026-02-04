@@ -1,7 +1,13 @@
-# Copy this file to .dev.vars and fill in your values
-# These are used for local development with `wrangler dev`
+# AI Provider Config (OpenAI-compatible)
+AI_API_KEY=your_api_key
+AI_TEXT_MODEL=google/gemini-2.5-flash
+AI_IMAGE_MODEL=none
+# Optional: Custom OpenAI-compatible endpoint (defaults to Railway AI gateway)
+# AI_API_ENDPOINT=https://ai-gateway-api-production.up.railway.app/v1
 
-GEMINI_API_KEY=your_gemini_api_key
-FB_ACCESS_TOKEN=your_facebook_access_token
+# Facebook Config
+FB_ACCESS_TOKEN=your_facebook_page_access_token
 FB_PAGE_ID=your_facebook_page_id
+
+# News Config
 GNEWS_API_KEY=your_gnews_api_key

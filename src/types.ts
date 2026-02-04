@@ -1,7 +1,15 @@
 export interface Env {
-  GEMINI_API_KEY: string;
+  // AI Provider Config
+  AI_API_KEY: string;
+  AI_API_ENDPOINT?: string; // Optional: for custom endpoints
+  AI_TEXT_MODEL: string;
+  AI_IMAGE_MODEL: string;
+
+  // Facebook Config
   FB_ACCESS_TOKEN: string;
   FB_PAGE_ID: string;
+
+  // News Config
   GNEWS_API_KEY: string;
 }
 
@@ -40,5 +48,17 @@ export interface FacebookError {
     code: number;
     message: string;
     type: string;
+  };
+}
+
+export interface TokenDebugResponse {
+  data?: {
+    is_valid: boolean;
+    expires_at?: number;
+    scopes?: string[];
+  };
+  error?: {
+    message: string;
+    code: number;
   };
 }

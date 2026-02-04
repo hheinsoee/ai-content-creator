@@ -11,7 +11,7 @@
     "test:run": "npx tsx scripts/test.ts"
   },
   "dependencies": {
-    "@google/genai": "^1.8.0"
+    "openai": "^4.77.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250708.0",
