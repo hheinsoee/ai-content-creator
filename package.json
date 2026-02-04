@@ -3,24 +3,22 @@
   "version": "1.0.0",
   "description": "Automated news content creator and Facebook poster",
   "type": "module",
-  "main": "run.js",
   "scripts": {
-    "test": "node test.js",
-    "test:facebook": "node test-facebook.js",
+    "dev": "wrangler dev --test-scheduled",
     "deploy": "wrangler deploy",
-		"dev": "wrangler dev --test-scheduled",
-		"start": "wrangler dev --test-scheduled",
-		"logs": "wrangler tail",
-		"build": "echo 'No build step needed'"
+    "logs": "wrangler tail",
+    "typecheck": "tsc --noEmit",
+    "test:run": "npx tsx scripts/test.ts"
   },
   "dependencies": {
-    "@google/genai": "^0.2.0",
-    "axios": "^1.6.7",
-    "dotenv": "^16.4.5",
-    "node-cron": "^3.0.3"
+    "@google/genai": "^1.8.0"
   },
-	"devDependencies": {
-		"wrangler": "^4.16.1"
-	},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250708.0",
+    "@types/node": "^24.0.10",
+    "tsx": "^4.19.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.16.1"
+  },
   "packageManager": "pnpm@10.8.1+sha512.c50088ba998c67b8ca8c99df8a5e02fd2ae2e2b29aaf238feaa9e124248d3f48f9fb6db2424949ff901cffbb5e0f0cc1ad6aedb602cd29450751d11c35023677"
 }

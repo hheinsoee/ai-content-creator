@@ -1,0 +1,7 @@
+# Copy this file to .dev.vars and fill in your values
+# These are used for local development with `wrangler dev`
+
+GEMINI_API_KEY=your_gemini_api_key
+FB_ACCESS_TOKEN=your_facebook_access_token
+FB_PAGE_ID=your_facebook_page_id
+GNEWS_API_KEY=your_gnews_api_key
