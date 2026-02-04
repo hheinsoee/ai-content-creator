@@ -1,6 +1,6 @@
 import type { Env, GeneratedContent, NewsItem } from '../../types.js';
-import { fetchLatestNews } from './news.js';
-import { generateAIContent } from './ai.js';
+import { fetchAINews, fetchLatestNews } from './news.js';
+import { generateAIContent, selectBestArticle } from './ai.js';
 
 export interface ContentResult {
   content: GeneratedContent;
@@ -8,18 +8,31 @@ export interface ContentResult {
 }
 
 export async function createContent(env: Env): Promise<ContentResult | null> {
-  console.log('Fetching latest news...');
-  const newsItem = await fetchLatestNews(env);
+  // Step 1: Fetch 5 AI news articles
+  console.log('Fetching AI news articles...');
+  const articles = await fetchAINews(env, 5);
 
-  if (!newsItem) {
-    console.log('No news items found');
+  if (articles.length === 0) {
+    console.log('No AI news articles found');
     return null;
   }
 
-  console.log('News found:', newsItem.title);
+  console.log(`Found ${articles.length} articles`);
 
-  console.log('Generating AI content...');
-  const content = await generateAIContent(env, newsItem);
+  // Step 2: Use AI to select the best article
+  console.log('Selecting best article...');
+  const bestArticle = await selectBestArticle(env, articles);
+
+  if (!bestArticle) {
+    console.log('Failed to select article');
+    return null;
+  }
+
+  console.log('Selected:', bestArticle.title);
+
+  // Step 3: Generate Myanmar content
+  console.log('Generating Myanmar content...');
+  const content = await generateAIContent(env, bestArticle);
 
   if (!content) {
     console.log('Failed to generate content');
@@ -27,8 +40,8 @@ export async function createContent(env: Env): Promise<ContentResult | null> {
   }
 
   console.log('Content generated successfully');
-  return { content, source: newsItem };
+  return { content, source: bestArticle };
 }
 
-export { fetchLatestNews, generateAIContent };
-export { generateText, generateImage } from './ai.js';
+export { fetchAINews, fetchLatestNews };
+export { generateAIContent, selectBestArticle, generateText, generateImage } from './ai.js';

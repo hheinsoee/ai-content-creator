@@ -14,9 +14,11 @@ devVars.split('\n').forEach((line) => {
 
 // Dynamic imports for ESM modules
 async function loadModules() {
-  const { fetchLatestNews, generateText, generateImage } = await import('../src/modules/createContent/index.js');
+  const { fetchAINews, generateText, generateImage, selectBestArticle } = await import(
+    '../src/modules/createContent/index.js'
+  );
   const { postToFacebook, addComment } = await import('../src/modules/publishContent/index.js');
-  return { fetchLatestNews, generateText, generateImage, postToFacebook, addComment };
+  return { fetchAINews, generateText, generateImage, selectBestArticle, postToFacebook, addComment };
 }
 
 async function test<T>(name: string, fn: () => Promise<T>): Promise<T | null> {
@@ -48,7 +50,8 @@ Usage: pnpm test:run [command]
 
 Commands:
   (none)     Run safe tests (news, text, token)
-  news       Test news fetching
+  news       Fetch 5 AI news articles
+  select     Fetch news and select best article
   text       Test text generation
   image      Test image generation
   token      Test Facebook token validity
@@ -61,15 +64,28 @@ Commands:
 
   const modules = await loadModules();
 
-  // Test News
+  // Test AI News Fetching
   if (testName === 'news' || !testName) {
-    await test('News Fetching', () => modules.fetchLatestNews(env as any));
+    await test('Fetch AI News (5 articles)', async () => {
+      const articles = await modules.fetchAINews(env as any, 5);
+      return articles.map((a: any) => ({ title: a.title, url: a.url }));
+    });
+  }
+
+  // Test Article Selection
+  if (testName === 'select') {
+    await test('Fetch & Select Best Article', async () => {
+      const articles = await modules.fetchAINews(env as any, 5);
+      console.log(`   Found ${articles.length} articles`);
+      const best = await modules.selectBestArticle(env as any, articles);
+      return best;
+    });
   }
 
   // Test Text Generation
   if (testName === 'text' || !testName) {
     await test('Text Generation', async () => {
-      const prompt = 'Say "Hello World" in Burmese language';
+      const prompt = 'Say "Hello World" in Myanmar language';
       const text = await modules.generateText(env as any, prompt);
       return { prompt, text };
     });
@@ -78,7 +94,7 @@ Commands:
   // Test Image Generation
   if (testName === 'image') {
     await test('Image Generation', async () => {
-      const description = 'A beautiful sunset over mountains with vibrant orange and purple colors';
+      const description = 'Futuristic AI visualization with blue and purple colors';
       const imageData = await modules.generateImage(env as any, description);
       return {
         description,

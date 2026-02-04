@@ -8,6 +8,6 @@
     "enabled": true
   },
   "triggers": {
-    "crons": ["*/60 * * * *"]
+    "crons": ["0 */4 * * *"]
   }
 }
