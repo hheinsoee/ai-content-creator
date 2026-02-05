@@ -2,6 +2,7 @@
 AI_API_KEY=your_api_key
 AI_TEXT_MODEL=google/gemini-2.5-flash
 AI_IMAGE_MODEL=none
+AI_IMAGE_SIZE=1024x1024
 # Optional: Custom OpenAI-compatible endpoint (defaults to Railway AI gateway)
 # AI_API_ENDPOINT=https://ai-gateway-api-production.up.railway.app/v1
 

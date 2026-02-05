@@ -35,7 +35,7 @@ export async function generateImage(env: Env, description: string): Promise<stri
       messages: [
         {
           role: 'user',
-          content: `Generate an image: ${description}. Only output the image, no text.`,
+          content: `Generate an image: ${description}. Style: black and white vector art, simple, minimalist, high contrast, clean lines${env.AI_IMAGE_SIZE ? `, size: ${env.AI_IMAGE_SIZE}` : ''}. Only output the image, no text.`,
         },
       ],
     });
@@ -88,7 +88,7 @@ export async function selectAndGenerate(
   if (articles.length === 0) return null;
 
   const articleList = articles
-    .map((a, i) => `[${i + 1}] ${a.title}: ${a.content}`)
+    .map((a, i) => `[${i + 1}] ${a.title}: ${a.content.substring(0, 500)}${a.content.length > 500 ? '...' : ''}`)
     .join('\n');
 
   const prompt = `You are a Myanmar tech blogger selecting and creating content for Facebook.
@@ -139,7 +139,7 @@ JSON only:`;
       content: {
         selectedIndex: 0,
         myanmarText: articles[0].title,
-        imagePrompt: 'Futuristic AI technology visualization with blue colors',
+        imagePrompt: 'Futuristic AI technology visualization, black and white vector art',
       },
     };
   }

@@ -4,6 +4,7 @@ export interface Env {
   AI_API_ENDPOINT?: string; // Optional: for custom endpoints
   AI_TEXT_MODEL: string;
   AI_IMAGE_MODEL: string;
+  AI_IMAGE_SIZE?: string; // Optional: e.g. "1024x1024"
 
   // Facebook Config
   FB_ACCESS_TOKEN: string;
