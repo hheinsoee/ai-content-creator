@@ -3,11 +3,35 @@
   "name": "ai-content-creator",
   "main": "src/index.ts",
   "compatibility_date": "2025-05-23",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "observability": {
     "enabled": true
   },
   "triggers": {
-    "crons": ["0 */4 * * *"]
-  }
+    "crons": [
+      "0 9 * * *"
+    ]
+  },
+  "vars": {
+    "AI_TEXT_MODEL": "google/gemini-2.5-flash",
+    "AI_IMAGE_MODEL": "google/gemini-2.5-flash-image",
+    "AI_IMAGE_SIZE": "512x512",
+    "AI_API_ENDPOINT": "https://ai-gateway-api-production.up.railway.app/v1",
+    "FB_PAGE_ID": "639622062558928"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ai-content-db",
+      "database_id": "d0f2d4ec-3b20-43ba-b46c-1c5114b324e5"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BUCKET",
+      "bucket_name": "ai-content-images"
+    }
+  ]
 }

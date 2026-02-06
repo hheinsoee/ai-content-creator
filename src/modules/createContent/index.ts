@@ -8,20 +8,38 @@ export interface ContentResult {
 }
 
 export async function createContent(env: Env): Promise<ContentResult | null> {
-  // Step 1: Fetch 5 AI news articles
+  // Step 1: Fetch 20 AI news articles
   console.log('Fetching AI news articles...');
-  const articles = await fetchAINews(env, 5);
+  const articles = await fetchAINews(env, 20);
 
   if (articles.length === 0) {
     console.log('No AI news articles found');
     return null;
   }
 
-  console.log(`Found ${articles.length} articles`);
+  // Step 1.5: Filter out already posted articles
+  let newArticles = articles;
+  if (env.DB) {
+    try {
+      const { results } = await env.DB.prepare('SELECT url FROM posted_articles').all();
+      const postedUrls = new Set(results.map((r: any) => r.url));
+      newArticles = articles.filter((a) => !postedUrls.has(a.url));
+      console.log(`Filtered: ${articles.length} total -> ${newArticles.length} new articles`);
+    } catch (e) {
+      console.error('Error checking DB:', e);
+    }
+  }
+
+  if (newArticles.length === 0) {
+    console.log('All articles have been posted already');
+    return null;
+  }
+
+  console.log(`Found ${newArticles.length} new articles`);
 
   // Step 2: Select best article AND generate Myanmar content (1 API call)
   console.log('Selecting & generating content...');
-  const result = await selectAndGenerate(env, articles);
+  const result = await selectAndGenerate(env, newArticles);
 
   if (!result) {
     console.log('Failed to select and generate content');
@@ -30,13 +48,13 @@ export async function createContent(env: Env): Promise<ContentResult | null> {
 
   console.log('Selected:', result.article.title);
 
-  // Step 3: Generate image (1 API call)
+  // Step 3: Generate image (1 API call) or use original
   console.log('Generating image...');
-  const imageData = await generateImage(env, result.content.imagePrompt);
+  const imageData = await generateImage(env, result.content.imagePrompt, result.article.image);
 
   // Add hashtags and source URL to the post
-  const hashtags = '#AI #ArtificialIntelligence #Tech #Innovation #Myanmar #နည်းပညာ';
-  const fullText = `${result.content.myanmarText}\n\n${hashtags}\n\n🔗 ${result.article.url}`;
+  const hashtags = '#AI #နည်းပညာ #TechMyanmar #AIMyanmar #မြန်မာ';
+  const fullText = `${result.content.myanmarText}\n\n${hashtags}`;
 
   const content: GeneratedContent = {
     text: fullText,
@@ -48,4 +66,4 @@ export async function createContent(env: Env): Promise<ContentResult | null> {
 }
 
 export { fetchAINews, fetchLatestNews };
-export { selectAndGenerate, generateText, generateImage, selectBestArticle, generateAIContent } from './ai.js';
+export { selectAndGenerate, generateText, generateImage, selectBestArticle, generateAIContent, markArticleAsPosted } from './ai.js';

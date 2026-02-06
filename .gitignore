@@ -18,3 +18,4 @@ dist/
 
 # Logs
 *.log
+/image

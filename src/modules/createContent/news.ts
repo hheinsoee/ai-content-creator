@@ -2,10 +2,29 @@ import type { Env, NewsApiResponse, NewsItem } from '../../types.js';
 
 const NEWS_API_BASE = 'https://gnews.io/api/v4/search';
 
+// Topics relevant to Myanmar audience
+// Topics relevant to Myanmar audience (Simplified for better hit rate)
+const SEARCH_TOPICS = [
+  '"AI tools"',
+  '"free AI"',
+  '"AI tips"',
+  '"free hosting"',
+  '"AI for Myanmar"',
+  '"AI for Myanmar students"',
+];
+
+function getRandomTopics(count: number = 2): string {
+  // Pick random topics and join with OR
+  const shuffled = [...SEARCH_TOPICS].sort(() => Math.random() - 0.5);
+  // Example result: "AI tools" OR "ChatGPT"
+  return shuffled.slice(0, count).join(' OR ');
+}
+
 export async function fetchAINews(env: Env, count: number = 5): Promise<NewsItem[]> {
   try {
-    const query = encodeURIComponent('artificial intelligence OR AI OR machine learning');
+    const query = encodeURIComponent(getRandomTopics(3));
     const url = `${NEWS_API_BASE}?q=${query}&apikey=${env.GNEWS_API_KEY}&max=${count}&lang=en`;
+    console.log('Search query:', decodeURIComponent(query));
 
     console.log('Fetching news from GNews...');
     const response = await fetch(url);

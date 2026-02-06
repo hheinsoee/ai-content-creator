@@ -12,6 +12,10 @@ export interface Env {
 
   // News Config
   GNEWS_API_KEY: string;
+
+  // Storage
+  DB: D1Database;
+  BUCKET: R2Bucket;
 }
 
 export interface NewsArticle {

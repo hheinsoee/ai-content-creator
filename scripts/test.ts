@@ -66,9 +66,9 @@ Commands:
 
   // Test AI News Fetching
   if (testName === 'news' || !testName) {
-    await test('Fetch AI News (5 articles)', async () => {
-      const articles = await modules.fetchAINews(env as any, 5);
-      return articles.map((a: any) => ({ title: a.title, url: a.url }));
+    await test('Fetch AI News (20 articles)', async () => {
+      const articles = await modules.fetchAINews(env as any, 20);
+      return articles;
     });
   }
 
